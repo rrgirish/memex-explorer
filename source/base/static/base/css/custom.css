@@ -123,6 +123,9 @@ background-color: #1D4971;
 .controls{
     padding-left: 40px;
 }
+.no-margin-top {
+  margin-top:0px;
+}
 
 
 /* Crawl page - controls statistics display */
