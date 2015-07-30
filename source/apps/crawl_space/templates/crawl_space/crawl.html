@@ -67,12 +67,7 @@
   <div class='col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 controls'>
     <!-- Crawl actions (Start, Stop[, Restart]) -->
     <div class='row'>
-      <div class="col-md-2">
-        <h5>Crawl Status: <span id="status">{{ crawl.status }}</span></h5>
-        {% if crawl.crawler == "nutch" %}
-        <h5>Rounds left: <span id="roundsLeft">{{ crawl.rounds_left }}</span></h5>
-        {% endif %}
-      </div>
+
       <div class="col-md-3" style="margin-top:1%">
         <button id="playButton" title="Start Crawl" type="button" class="btn btn-control"
           data-container="body"
@@ -80,7 +75,7 @@
               disabled
           {% endif %}
           data-toggle="tooltip" data-placement="bottom">
-          <span class="fa fa-play fa-4x"></span>
+          <span class="fa fa-play fa-2x"></span>
         </button>
 
         <button id="stopButton" title="Stop Crawl" type="button" class="btn btn-control"
@@ -89,7 +84,7 @@
           disabled
           {% endif %}
           data-toggle="tooltip" data-placement="bottom">
-          <span class="fa fa-stop fa-4x"></span>
+          <span class="fa fa-stop fa-2x"></span>
         </button>
 
         <button id="restartButton" title="Restart Crawl" type="button" class="btn btn-control"
@@ -98,22 +93,46 @@
             disabled
           {% endif %}
           data-toggle="tooltip" data-placement="bottom">
-          <span class="fa fa-refresh fa-4x"></span>
+          <span class="fa fa-refresh fa-2x"></span>
         </button>
       {% if crawl.crawler == "nutch" %}
-      <p style="display:inline;margin-left:5px;">Rounds:
-        <input id="rounds" type="number" class="btn btn-control" value="{{ crawl.rounds_left }}" min="1" max="99" style="font-size:18px;background-color:white;border:2px solid #EEEEEE"></input>
-      </p>
       <button id="forceStopButton" title="Force Stop Crawl" type="button" class="btn btn-control"
         data-container="body"
         {% if crawl.status != "STARTED" %}
           disabled
         {% endif %}
         data-toggle="tooltip" data-placement="bottom">
-        <span class="fa fa-exclamation-triangle" style="padding:6px;"></span>
+        <span class="fa fa-exclamation-triangle fa-2x"></span>
       </button>
       {% endif %}
       </div>
+
+      <div class="col-md-3">
+        <h5>Crawl Status: 
+          <span>
+            <div class="progress">
+              <div  id="status" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%" class="progress-bar 
+              {% if crawl.status == "NOT STARTED" %}
+                progress-bar-warning
+              {% elif crawl.status == "SUCCESS" %}
+                progress-bar-success
+              {% elif crawl.status == "DANGER" %}
+                progress-bar-danger
+              {% else %}
+                progress-bar-info progress-bar-striped active
+              {% endif %}
+                ">
+                  {{ crawl.status }}
+              </div>
+            </div>
+          </span>
+        </h5>
+        {% if crawl.crawler == "nutch" %}
+        <h5>Rounds left: <span id="roundsLeft">{{ crawl.rounds_left }}</span>/
+        <input id="rounds" type="number" class="input-xs" value="{{ crawl.rounds_left }}" min="1" max="99"/></h5>
+        {% endif %}
+      </div>
+      
       <div class="col-md-4 btn-group" style="margin-top:1%;">
         <form method="get" style="display:inline;">
             <input type="hidden" name="resource" value="initial_seeds">
@@ -231,7 +250,7 @@
 {% endif %}
 
 <div class='row'>
-  <div class="col-sm-7 col-sm-offset-3 col-md-7 col-md-offset-2 main">
+  <div class="col-md-8 col-md-offset-2 main">
     <div class="row">
       <hr/>
         <h4 class="col-md-3">

@@ -92,7 +92,7 @@ $( document ).ready(function() {
 
   $('#playButton').on('click', function() {
 
-    $( '#status' ).text( "STARTING" );
+    $( '#status' ).text( "STARTING" ).removeClass("progress-bar-warning").addClass("progress-bar-info").addClass("progress-bar-striped");
     onOffStatus("STARTING");
     this.disabled = true;
     $('#stopButton').attr("disabled", false);
