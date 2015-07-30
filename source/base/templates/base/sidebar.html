@@ -3,10 +3,12 @@
   <div class="accordion" id="accordion2">
     <div class="accordion-group">
       <div class="accordion-heading sidebar-buttons">
-        <a href="{% url 'base:crawl_space:crawls' project_slug=project.slug %}">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+        <!--<a href="{% url 'base:crawl_space:crawls' project_slug=project.slug %}">-->
         Crawls
+        <!--</a>-->
+      <i class="fa fa-list pull-right"></i>
       </a>
-      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne"  style='float:right;'><i class="fa fa-list"></i></a>
     </div>
     <div id="collapseOne" class="accordion-body collapse accordion-links">
       {% if project.crawl_set.all %}
@@ -25,10 +27,12 @@
   <div class="accordion" id="accordion3">
     <div class="accordion-group">
       <div class="accordion-heading sidebar-buttons">
-        <a href="{% url 'base:indices' project_slug=project.slug %}">
-        Datasets
-      </a>
-      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href="#collapseThree"  style='float:right;'><i class="fa fa-list"></i></a>
+        <!-- <a href="{% url 'base:indices' project_slug=project.slug %}"> -->
+         <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href="#collapseThree">
+          Datasets
+        <!-- </a> -->
+          <i class="fa fa-list pull-right"></i>
+        </a>
     </div>
     <div id="collapseThree" class="accordion-body collapse accordion-links">
       {% if project.index_set.all %}
