@@ -22,6 +22,7 @@ dependencies:
     - jinja2
     - redis-py
     - nodejs
+    - scrapy
     - pip:
         - tld
         - tika==1.8.7
