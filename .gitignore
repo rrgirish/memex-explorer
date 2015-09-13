@@ -2,6 +2,7 @@
 resources/
 test_resources/
 source/memex/settings.py
+source/scraper/run_scraper.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

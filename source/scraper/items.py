@@ -1,5 +1,6 @@
 import scrapy
 
 
-class ScraperItem(scrapy.Item):
-    pass
+class LinkItem(scrapy.Item):
+    link = scrapy.Field()
+    text = scrapy.Field()
