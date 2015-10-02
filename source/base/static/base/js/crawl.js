@@ -40,7 +40,7 @@ $( document ).ready(function() {
       data: {"action": "status"},
       success: function(response){
         $( '#status' ).text(response.status);
-        onOffStatus(response.status);
+        // onOffStatus(response.status);
         $( '#roundsLeft' ).text(response.rounds_left);
         $( '#stats-pages' ).text(response.pages_crawled);
         if ('harvest_rate' in response) {
@@ -49,7 +49,7 @@ $( document ).ready(function() {
             $('#getSeeds').attr("disabled", false);
           }
         }
-        onOffStatus(response.status);
+        // onOffStatus(response.status);
       }
     });
   }

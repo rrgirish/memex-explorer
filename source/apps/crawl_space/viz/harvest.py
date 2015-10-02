@@ -7,7 +7,7 @@ import pandas as pd
 from bokeh.plotting import *
 from bokeh.embed import components
 from bokeh.resources import INLINE
-from bokeh.objects import HoverTool
+from bokeh.models import HoverTool
 from bokeh.models import ColumnDataSource
 from collections import OrderedDict
 import numpy as np

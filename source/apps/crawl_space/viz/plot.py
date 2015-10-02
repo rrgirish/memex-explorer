@@ -1,16 +1,10 @@
-import os
 from StringIO import StringIO
 
-from abc import ABCMeta, abstractmethod
-
-from bokeh.models import ColumnDataSource
-from bokeh.plotting import Document, Session
 import pandas as pd
 
 from harvest import Harvest
 from domain import Domain
-from apps.crawl_space.settings import CRAWL_PATH
-
+from url_trails import plot_server_stream
 
 class PlotsNotReadyException(Exception):
     pass
@@ -53,4 +47,22 @@ class AcheDashboard(object):
             'scripts': [domain_plot[0], harvest_plot[0]],
             'divs': [domain_plot[1], harvest_plot[1]],
         }
+
+
+class NutchDashboard(object):
+
+    def __init__(self, crawl):
+        self.crawl = crawl
+        if self.crawl.crawler != "nutch":
+            raise ValueError("Crawl must be using the Nutch crawler.")
+
+    # TODO: Replace with real crawl stream monitoring
+    def get_plots(self):
+        script, div = plot_server_stream()
+        return {
+            'scripts': [script],
+            'divs': [div],
+        }
+
+
 
