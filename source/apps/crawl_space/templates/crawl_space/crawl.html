@@ -6,11 +6,6 @@
   <link href="{% static 'base/css/bokeh.min.css' %}" rel="stylesheet">
     <script src="{% static 'base/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'base/js/bokeh.min.js' %}"></script>
-{% if scripts %}
-    {% for script in scripts %}
-        {{ script | safe }}
-    {% endfor %}
-{% endif %}
 {% endblock %}
 
 {% block extrafooter %}
@@ -141,7 +136,7 @@
     </div>
   </div>
 </div>
-{% if crawl.crawler == "ache" or crawl.crawler == "nutch"%}
+{% if crawl.crawler == "ache" or crawl.crawler == "nutch" %}
 <div class='row'>
   <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
     {% if divs.0 or divs.1 %}
@@ -153,11 +148,18 @@
         </div>
         {% endif %}
         {% endfor %}
+
     {% elif crawl.crawler == 'ache' %}
         <div class='col-sm-6'>
             <h2>Waiting for plots...</h2>
         </div>
     {% endif %}
+    {% if scripts %}
+        {% for script in scripts %}
+            {{ script | safe }}
+        {% endfor %}
+    {% endif %}
+
   </div>
 </div>
 

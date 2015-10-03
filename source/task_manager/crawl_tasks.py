@@ -53,32 +53,38 @@ def nutch(self, crawl, rounds=1, *args, **kwargs):
 
     # TODO: rip this out
     from apps.crawl_space.viz.url_trails import load_data
+    import numpy as np
+    from datetime import timedelta
+
     x, x0, urls = load_data()
     min_x = min(x0)
     max_x = max(x[:5])
-    old_segments = None
-    old_circles = None
 
-    def progress_crawl(min_x, max_x, old_segments, old_circles):
-        import numpy as np
+    second_delta = np.timedelta64(timedelta(seconds=1))
+
+
+    def progress_crawl(min_x, max_x):
         from bokeh.session import Session
         from bokeh.document import Document
-        from bokeh.plotting import Figure
-        from datetime import timedelta
+        from bokeh.models import ColumnDataSource
+        from bokeh.models.glyphs import Segment, Circle
+
 
         session = Session()
         session.use_doc("wiki_crawl")
         document = Document()
         session.load_document(document)
-        p1 = document.context.children[0]
 
-        # I'm going to programmer hell for this
-        p1.__class__ = Figure
-
-        second_delta = np.timedelta64(timedelta(seconds=1))
 
         min_x += second_delta
         max_x += second_delta
+
+        if len(document.context.children) == 0:
+            sys.stderr.write("no wiki_crawl document\n")
+            return min_x, max_x
+
+        p1 = document.context.children[0]
+
 
         active_min = x0.searchsorted(min_x)
         active_max = x.searchsorted(max_x, side='right')
@@ -93,16 +99,23 @@ def nutch(self, crawl, rounds=1, *args, **kwargs):
         p1.x_range.start = min_x
         p1.x_range.end = max_x
 
-#        if old_segments:
-#            p1.renderers.remove(old_segments)
-#        if old_circles:
-#            p1.renderers.remove(old_circles)
+        # TODO: Find out why this is necessary
+        source3 = ColumnDataSource(dict(
+            x=active_x,
+            x0=active_x0,
+            urls=active_urls,
+            )
+        )
 
-        old_segments = p1.segment(active_x0, range(len(active_urls)), active_x, range(len(active_urls)), line_width=10, line_color="orange")
-        old_circles = p1.circle(active_x, range(len(active_urls)), size=5, fill_color="green", line_color="orange", line_width=12)
+        p1.renderers = p1.renderers[:-2]
+        glyph1 = Segment(x0="x0", y0="urls", x1="x", y1="urls", line_color="orange", line_width=10)
+        p1.add_glyph(source3, glyph1)
+        glyph2 = Circle(x="x", y="urls", size=5, fill_color="green", line_color="orange", line_width=12)
+        p1.add_glyph(source3, glyph2)
+        # END TODO
 
-        session.store_document(document, dirty_only=False)
-        return min_x, max_x, old_segments, old_circles
+        session.store_document(document)
+        return min_x, max_x
     # END TODO rip
 
     while self.crawl.rounds_left:
@@ -111,15 +124,15 @@ def nutch(self, crawl, rounds=1, *args, **kwargs):
 
         active_job = rest_crawl.progress(nextRound=False)
         while active_job:
+            time.sleep(1)
+            # TODO: replace with non-fake crawl viz
             old_job = active_job
             active_job = rest_crawl.progress(nextRound=False)
+            min_x, max_x = progress_crawl(min_x, max_x)
             if active_job and active_job != old_job:
                 self.crawl.status = active_job.info()['type']
                 self.crawl.save()
                 # TODO: update pages crawled here from crawldb when appropriate
-                time.sleep(1)
-                # TODO: replace with non-fake crawl viz
-                min_x, max_x, old_segments, old_circles = progress_crawl(min_x, max_x, old_segments, old_circles)
         self.crawl.rounds_left -= 1
         self.crawl.save()
     self.crawl_task = None

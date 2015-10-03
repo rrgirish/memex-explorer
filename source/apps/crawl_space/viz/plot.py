@@ -58,10 +58,10 @@ class NutchDashboard(object):
 
     # TODO: Replace with real crawl stream monitoring
     def get_plots(self):
-        script, div = plot_server_stream()
+        script = plot_server_stream()
         return {
             'scripts': [script],
-            'divs': [div],
+            'divs': [],
         }
 
 
